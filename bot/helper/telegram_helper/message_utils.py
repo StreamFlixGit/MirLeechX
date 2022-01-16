@@ -21,6 +21,29 @@ def sendMessage(text: str, bot, update: Update):
     except Exception as e:
         LOGGER.error(str(e))
 
+def sendMes(text: str, bot, update: Update):
+    try:
+        return bot.send_message(update.message.from_user.id,
+                            text=text, allow_sending_without_reply=True, parse_mode='HTMl', disable_web_page_preview=True)
+    except RetryAfter as r:
+        LOGGER.error(str(r))
+        time.sleep(r.retry_after)
+        return sendMessage(text, bot, update)
+    except Exception as e:
+        LOGGER.error(str(e))
+
+def sendMar(text: str, bot, update: Update, reply_markup: InlineKeyboardMarkup):
+    try:
+        return bot.send_message(update.message.from_user.id,
+                            text=text, reply_markup=reply_markup, allow_sending_without_reply=True, 
+                            parse_mode='HTMl', disable_web_page_preview=True)
+    except RetryAfter as r:
+        LOGGER.error(str(r))
+        time.sleep(r.retry_after)
+        return sendMarkup(text, bot, update, reply_markup)
+    except Exception as e:
+        LOGGER.error(str(e))
+
 def sendMarkup(text: str, bot, update: Update, reply_markup: InlineKeyboardMarkup):
     try:
         return bot.send_message(update.message.chat_id,
